@@ -1,6 +1,7 @@
 package main
 
 import (
+	"booking-app/helper"
 	"fmt"
 	"strings"
 )
@@ -8,20 +9,20 @@ import (
 const comferenceTickets = 50
 
 var conferenceName = "Go Conference"
-var remaniningTickets uint = 50
+var RemaniningTickets uint = 50
 var bookings = []string{}
 
 func main() {
 
-	fmt.Printf("conferenceTickets is %T, remainingTickets is %T, conferenceName is %T\n", comferenceTickets, remaniningTickets, conferenceName)
+	fmt.Printf("conferenceTickets is %T, remainingTickets is %T, conferenceName is %T\n", comferenceTickets, RemaniningTickets, conferenceName)
 
 	greetUers()
 
-	for remaniningTickets > 0 && len(bookings) < 50 {
+	for RemaniningTickets > 0 && len(bookings) < 50 {
 
 		firstName, lastName, email, userTickets := getUserInputs()
 
-		isValidName, isValidEmail, isvalidTicketNumber := validateUserInputs(firstName, lastName, email, userTickets)
+		isValidName, isValidEmail, isvalidTicketNumber := helper.ValidateUserInputs(firstName, lastName, email, userTickets, RemaniningTickets)
 
 		if isValidName && isValidEmail && isvalidTicketNumber {
 
@@ -32,13 +33,13 @@ func main() {
 
 			fmt.Printf("These are all our bookings: %v\n", bookings)
 
-			if remaniningTickets == 0 {
+			if RemaniningTickets == 0 {
 				//end program
 				fmt.Println("Our conference is booked out. Come back next year")
 				break
 			}
 
-		} else if userTickets == remaniningTickets {
+		} else if userTickets == RemaniningTickets {
 
 		} else {
 			if !isValidName {
@@ -57,7 +58,7 @@ func main() {
 
 func greetUers() {
 	fmt.Printf("Welcome to %v booking application\n", conferenceName)
-	fmt.Printf("We have total of %v tickets and %v are still available.\n", comferenceTickets, remaniningTickets)
+	fmt.Printf("We have total of %v tickets and %v are still available.\n", comferenceTickets, RemaniningTickets)
 	fmt.Println("Get your tickets here toa attend")
 }
 
@@ -69,14 +70,6 @@ func getFirstNames() []string {
 	}
 
 	return firstNames
-}
-
-func validateUserInputs(firstName string, lastName string, email string, userTickets uint) (bool, bool, bool) {
-	isValidName := len(firstName) >= 2 && len(lastName) >= 2
-	isValidEmail := strings.Contains(email, "@")
-	isvalidTicketNumber := userTickets > 0 && userTickets <= remaniningTickets
-
-	return isValidName, isValidEmail, isvalidTicketNumber
 }
 
 func getUserInputs() (string, string, string, uint) {
@@ -99,7 +92,7 @@ func getUserInputs() (string, string, string, uint) {
 }
 
 func bookTicket(userTickets uint, bookings []string, firstName string, lastName string, email string, conferenceName string) {
-	remaniningTickets = remaniningTickets - userTickets
+	RemaniningTickets = RemaniningTickets - userTickets
 	bookings = append(bookings, firstName+" "+lastName)
 
 	//arrsy details
@@ -109,5 +102,5 @@ func bookTicket(userTickets uint, bookings []string, firstName string, lastName 
 	fmt.Printf("Array lenght: %v\n", len(bookings))
 
 	fmt.Printf("Thank you %v %v for booking %v tickets. You will receive a confirmation email at %v\n", firstName, lastName, userTickets, email)
-	fmt.Printf("%v tickets remaning for %v\n", remaniningTickets, conferenceName)
+	fmt.Printf("%v tickets remaning for %v\n", RemaniningTickets, conferenceName)
 }
